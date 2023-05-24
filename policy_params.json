@@ -1,0 +1,365 @@
+{
+    "info": "clean_car_grad_1_seed1_entropy0",
+    "sub_dirname": "task",
+    "seed": 1,
+    "cuda_id": 6,
+    "env_params": {
+        "env_name": "clearning_car",
+        "env_names": ["block", "kitchen", "kitchen_w_skills", "craft", "installing_printer", "thawing", "clearning_car", "empty"],
+        "num_envs": 20,
+        "use_stage_reward": false,
+        "policy_keys": ["step_count"],
+        "manipulation_env_params": {
+            "robots": "UR5e",
+            "controller_name": "OSC_POSITION",
+            "gripper_types": "RethinkGripper",
+            "control_freq": 20,
+            "reward_scale": 1.0,
+            "block_env_params": {
+                "dynamics_keys": ["robot0_eef_pos", "robot0_eef_vel", "robot0_gripper_qpos", "robot0_gripper_qvel",
+                                  "mov0_pos", "mov0_quat"],
+                "policy_additional_keys": [],
+                "horizon": 250,
+                "num_movable_objects": 1,
+                "cube_x_range": [-0.25, 0.25],
+                "cube_y_range": [-0.25, 0.25],
+                "table_full_size": [0.8, 1.2, 0.05],
+                "table_offset": [0.0, 0.0, 0.8],
+                "normalization_range": [[-0.5, -0.5, 0.7], [0.5, 0.5, 1.1]]
+            },
+            "kitchen_env_params": {
+                "horizon": 100,
+                "dynamics_keys": ["robot0_eef_pos", "robot0_gripper_qpos",
+                                  "butter_pos", "butter_quat", "butter_melt_status",
+                                  "meatball_pos", "meatball_cook_status", "meatball_overcooked",
+                                  "pot_pos", "pot_quat",
+                                  "stove_pos", "target_pos",
+                                  "button_pos", "button_joint_qpos"],
+                "policy_additional_keys": ["robot0_eef_vel", "robot0_gripper_qvel",
+                                           "butter_to_robot0_eef_pos", "butter_to_robot0_eef_quat", "butter_grasped",
+                                           "meatball_to_robot0_eef_pos", "meatball_grasped",
+                                           "pot_to_robot0_eef_pos", "pot_to_robot0_eef_quat", "pot_grasped",
+                                           "stove_to_robot0_eef_pos", "target_to_robot0_eef_pos",
+                                           "pot_handle_pos", "pot_handle_to_robot0_eef_pos",
+                                           "button_handle_pos", "button_handle_to_robot0_eef_pos", "button_touched"],
+                "butter_x_range": [-0.25, -0.15],
+                "butter_y_range": [-0.3, -0.2],
+                "meatball_x_range": [-0.15, -0.05],
+                "meatball_y_range": [-0.3, -0.2],
+                "pot_x_range": [-0.20, -0.10],
+                "pot_y_range": [-0.10, -0.00],
+                "button_x_range": [-0.2, -0.05],
+                "button_y_range": [0.15, 0.3],
+                "stove_x_range": [0.05, 0.25],
+                "stove_y_range": [-0.225, -0.1],
+                "target_x_range": [0.05, 0.25],
+                "target_y_range": [0.1, 0.2],
+                "table_full_size": [0.8, 1.2, 0.05],
+                "table_offset": [0.0, 0.0, 0.8],
+                "normalization_range": [[-0.5, -0.6, 0.7], [0.5, 0.6, 1.2]]
+            }
+        },
+        "craft_env_params": {
+            "policy_additional_keys": [],
+            "use_pose": true,
+            "goal": "diamond",
+            "width": 16,
+            "height": 16,
+            "horizon": 300
+        },
+        "installing_printer_env_params": {
+            "dynamics_keys": ["agent_pos", "agent_dir", "printer_pos", "printer_state", "table_pos"],
+            "policy_additional_keys": [],
+            "horizon": 200,
+            "room_size": 10
+        },
+        "thawing_env_params": {
+            "dynamics_keys": ["agent_pos", "agent_dir", "fish_pos", "fish_state",
+                              "sink_pos", "frig_pos", "frig_state"],
+            "policy_additional_keys": [],
+            "horizon": 300,
+            "room_size": 10
+        },
+        "clearning_car_env_params": {
+            "dynamics_keys": ["agent_pos", "agent_dir", "rag_pos", "rag_state", "soap_pos", "sink_pos",
+                            "sink_state", "car_pos", "car_state", "bucket_pos"],
+            "policy_additional_keys": [],
+            "horizon": 100,
+            "room_size": 10,
+            "noisy_tv": false,
+            "tv_dim": 10,
+            "tv_channel": 10
+        },
+        "empty_env_params": {
+            "dynamics_keys": ["agent_pos", "agent_dir"],
+            "horizon": 40,
+            "policy_additional_keys": [],
+            "size": 10
+        }
+    },
+    "training_params": {
+        "dynamics_algo": "grad_attn",
+        "policy_algo": "ppo",
+        "gt_causality_algo": "grad_attn",
+        "use_gt_causality": false,
+        "save_load_path": "",
+        "redirect_save": false,
+        "load_dynamics": "",
+        "load_policy": "",
+        "load_replay_buffer": "",
+        "total_step": 30000000,
+        "init_step": 20000,
+        "collect_transitions": true,
+        "num_dynamics_opt_steps": 1,
+        "num_policy_opt_steps": 1,
+        "eval_freq": 50,
+        "train_prop": 0.9,
+        "saving_freq": 1000000,
+        "plot_freq": 1000000,
+        "replay_buffer_params": {
+            "capacity": 10000000,
+            "prioritized_buffer": false,
+            "dynamics_alpha": 0.5
+        }
+    },
+    "encoder_params": {
+        "encoder_type": "identity",
+        "continuous_onehot": false
+    },
+    "dynamics_params": {
+        "num_pred_steps": 1,
+        "batch_size": 32,
+        "lr": 1e-5,
+        "grad_clip_norm": 10,
+        "ensemble_size": 5,
+        "ensemble_use_diff_batches": true,
+        "monolithic_arch": false,
+        "mixup": true,
+        "mixup_alpha": 0.1,
+        "orthogonal_init": false,
+        "grad_target_logit": false,
+        "new_uncertainty_calculation": false,
+        "intrinsic_reward_type": "local_causality_uncertainty_binary",
+        "intrinsic_reward_scale": 1,
+        "local_causality_metric": "grad",
+        "local_causality_threshold": 0.0003,
+        "use_dynamics_uncertainty_mask": true,
+        "dynamics_uncertainty_mask_threshold": 0,
+        "intrinsic_reward_types": ["none", "dynamics_curiosity", "dynamics_uncertainty", "cai",
+                                   "local_causality_uncertainty_binary", "local_causality_uncertainty_continuous"],
+        "local_causality_metrics": ["grad", "attention", "input_mask", "attention_signature", "sample_cmi"],
+        "contrastive_params": {
+            "num_negative_samples": 512,
+            "num_pred_samples": 16384,
+            "num_pred_iters": 3,
+            "pred_sigma_init": 0.33,
+            "pred_sigma_shrink": 0.5,
+            "energy_norm_reg_coef": 1e-6,
+            "delta_grad_reg_coef": 1e-6
+        },
+        "grad_attn_params": {
+            "dynamics_mode": "pred_scalar",
+            "feature_fc_dims": [64, 64],
+            "sa_encoding_fc_dims": [],
+            "delta_encoding_fc_dims": [64, 64],
+            "predictor_fc_dims": [],
+            "num_attns": 2,
+            "attn_params": {
+                "residual": true,
+                "attn_dim": 16,
+                "num_heads": 4,
+                "attn_out_dim": 64,
+                "attn_use_bias": false,
+                "share_weight_across_kqv": true,
+                "post_fc_dims": [64, 64]
+            },
+            "mask_params": {
+                "mask_type": "none",
+                "learn_signature_queries": true,
+                "signature_dim": 64,
+                "learn_bandwidth": true,
+                "init_bandwidth": 1.0,
+                "num_mask_attns": 2,
+                "mask_fc_dims": [],
+                "tau_start_val": 1.0,
+                "tau_end_val": 0.1,
+                "tau_anneal_starts": 0,
+                "tau_anneal_ends": 2000000,
+                "mask_reg_coef": 1e-2,
+                "mask_reg_anneal_starts": 500000,
+                "mask_reg_anneal_ends": 1000000
+            },
+            "sa_grad_reg_thre": 0,
+            "sa_grad_reg_pow": 1,
+            "sa_grad_lt_thre_reg_coef": 0,
+            "sa_grad_ge_thre_reg_coef": 0,
+            "sa_grad_reg_anneal_starts": 500000,
+            "sa_grad_reg_anneal_ends": 1000000,
+            "eval_tau": 0.995,
+            "global_causality_threshold": 0.1
+        }
+    },
+    "mask_gt_params": {
+        "num_pred_steps": 1,
+        "batch_size": 32,
+        "lr": 1e-5,
+        "average_intrinsic": true,
+        "grad_clip_norm": 10,
+        "ensemble_size": 1,
+        "ensemble_use_diff_batches": true,
+        "monolithic_arch": false,
+        "intrinsic_reward_type": "gt_causal_curiosity",
+        "intrinsic_reward_scale": 1.0,
+        "intrinsic_reward_types": ["none", "gt_causal_curiosity", "rnd"],
+        "rnd_params": {
+            "hidden_dim": 1024,
+            "rnd_rep_dim": 50
+        },
+        "grad_attn_params": {
+            "dynamics_mode": "pred_scalar",
+            "feature_fc_dims": [64, 64],
+            "sa_encoding_fc_dims": [],
+            "delta_encoding_fc_dims": [64, 64],
+            "predictor_fc_dims": [],
+            "num_attns": 2,
+            "attn_params": {
+                "residual": true,
+                "attn_dim": 32,
+                "num_heads": 4,
+                "attn_out_dim": 64,
+                "attn_use_bias": false,
+                "share_weight_across_kqv": true,
+                "post_fc_dims": [64, 64]
+            },
+            "mask_params": {
+                "mask_type": "none",
+                "learn_signature_queries": true,
+                "signature_dim": 64,
+                "learn_bandwidth": true,
+                "init_bandwidth": 1.0,
+                "num_mask_attns": 2,
+                "mask_fc_dims": [],
+                "tau_start_val": 1.0,
+                "tau_end_val": 0.1,
+                "tau_anneal_starts": 0,
+                "tau_anneal_ends": 2000000,
+                "mask_reg_coef": 1e-2,
+                "mask_reg_anneal_starts": 500000,
+                "mask_reg_anneal_ends": 1000000
+            },
+            "sa_grad_reg_thre": 0,
+            "sa_grad_reg_pow": 1,
+            "sa_grad_lt_thre_reg_coef": 3e-3,
+            "sa_grad_ge_thre_reg_coef": 1e-6,
+            "sa_grad_reg_anneal_starts": 500000,
+            "sa_grad_reg_anneal_ends": 1000000,
+            "eval_tau": 0.995,
+            "global_causality_threshold": 0.1
+        }
+    },
+    "policy_params": {
+        "num_td_steps": 1,
+        "discount": 1,
+        "stats_window_size": 20,
+        "sac_params": {
+            "fc_dims": [64, 64],
+            "critic_tau": 0.001,
+            "policy_lr": 1e-4,
+            "ent_coef_init": "auto",
+            "target_ent_coef_final": "auto",
+            "batch_size": 256
+        },
+        "td3_params": {
+            "fc_dims": [64, 64],
+            "tau": 0.005,
+            "policy_noise": 0.2,
+            "noise_clip": 0.5,
+            "update_actor_freq": 2,
+            "exploration_noise": 0.02,
+            "actor_lr": 1e-4,
+            "critic_lr": 1e-4
+        },
+        "dqn_params": {
+            "fc_dims": [16, 128],
+            "tau": 0.005,
+            "exploration_initial_eps": 1.0,
+            "exploration_final_eps": 0.05,
+            "lr": 2e-4,
+            "batch_size": 32
+        },
+        "ppo_params": {
+            "n_steps": 600,
+            "fc_dims": [128, 128],
+            "ratio_clip": 0.1,
+            "lambda_entropy": 0.0,
+            "lambda_gae_adv": 0.98,
+            "batch_size": 32,
+            "target_step": 250,
+            "lr": 1e-4
+        },
+        "hippo_params": {
+            "skill_names": ["lift", "push"],
+            "skill_probs": [0.5, 0.5],
+            "skill_params": {
+                "controller_scale": 0.05,
+                "reach_threshold": 0.01,
+                "lift_height": 0.9,
+                "disturbance_prob": 0.3,
+                "num_block_steps": 3,
+                "global_xyz_bound": [[-0.30, -0.40, 0.81], [0.20, 0.40, 1.00]],
+                "gripper_skill_params": {
+                    "num_max_steps": 4
+                },
+                "lift_skill_params": {
+                    "num_max_steps": 100,
+                    "num_reach_steps": 2,
+                    "num_grasp_steps": 10,
+                    "global_param_bound": [[-0.30, -0.40, 0.81], [0.20, 0.40, 1.00]]
+                },
+                "pick_place_skill_params": {
+                    "num_max_steps": 120,
+                    "place_target_name": "pot",
+                    "num_reach_steps": 2,
+                    "num_grasp_steps": 10,
+                    "num_arrived_steps": 2,
+                    "num_release_steps": 2
+                },
+                "hook_skill_params": {
+                    "num_max_steps": 130,
+                    "tool_name": "tool",
+                    "tool_relative_pos": [0.16, 0.05, 0.00],
+                    "num_reach_steps": 2,
+                    "num_grasp_steps": 10,
+                    "delta_xyz_scale": [0.15, 0.15, 0.01]
+                },
+                "push_skill_params": {
+                    "num_max_steps": 150,
+                    "global_param_bound": [[-0.30, -0.40, 0.81], [0.20, 0.40, 0.85]],
+                    "delta_xyz_scale": [0.15, 0.15, 0.02]
+                }
+            }
+        }
+    },
+    "scripted_policy_params": {
+        "demo_prob_init": 0.0,
+        "demo_prob_final": 0.0,
+        "demo_annealing_start": 10000,
+        "demo_annealing_end": 500000,
+        "random_action_prob": 0.1,
+        "action_noise_scale": 0.3,
+        "drop_prob": 0.01,
+        "pick_place_params": {
+            "is_demo": false,
+            "push_prob": 0.5,
+            "random_ep_prob": 0.1,
+            "rough_grasp_prob": 0.6,
+            "rough_grasp_noise_scale": 0.1,
+            "rough_move_prob": 0.3,
+            "push_z": 0.82
+        },
+        "craft_params": {
+            "random_primitive_prob": 0.1,
+            "random_craft_prob": 0.1
+        }
+    }
+}
